@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="bootstrap.css">
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-success">
+                <div class="panel panel-heading">欢迎来到聊天室</div>
+                <div class="panel panel-body">
+                    <ul class="list-group" id="msgUl">
+                        <li class="list-group-item">消息</li>
+
+                    </ul>
+                </div>
+                <div class="panel-footer">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" id="textMsg">
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-default" type="button" id="btnSub">发送</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="socket.io/socket.io.js"></script>
+<script src="node_modules/jquery/dist/jquery.js"></script>
+<script>
+    window.onload = function(){
+        var socket = io.connect('/');
+        socket.on('connect',function () {
+            $('#msgUl').append('<li class="list-group-item">链接成功</li>');
+            socket.send('nihaos')
+        })
+        socket.on('message',function (msg) {
+            $('#msgUl').append('<li class="list-group-item">'+ msg +'</li>');
+        })
+        $('#btnSub').on('click',function () {
+            socket.send($('#textMsg').val())
+        })
+    }
+   /* var socket = new WebSocket('ws://localhost:8080/');
+    socket.onopen = function () {
+        socket.send('你好服务器');
+    }
+    socket.onmessage = function (event) {
+        console.log(event.data);
+    }*/
+</script>
+
+</body>
+</html>
